@@ -1,0 +1,75 @@
+﻿@model QrSystem.ViewModel.UrunlerViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ürünler</title>
+    <!-- Bootstrap CSS bağlantısı -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        @foreach (var qrCodeId in Model.UrunlerByQrCodeAndTable.Keys)
+        {
+            <div class="row" id="row-@qrCodeId">
+                <div class="col">
+                    <h3>Masa Numarası @qrCodeId</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Ürün Adı</th>
+                                <th>Açıklama</th>
+                                <th>Fiyat</th>
+                                <th>Ürün Adedi</th>
+                                <th>Resim</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var displayedProducts = new HashSet<int>();
+                            }
+                            @foreach (var kvp in Model.UrunlerByQrCodeAndTable[qrCodeId])
+                            {
+                                foreach (var product in kvp.Value.GroupBy(p => p.Name))
+                                {
+                                    <tr>
+                                        <td>@product.Key</td>
+                                        <td>@product.First().Description</td>
+                                        <td>@product.First().Price</td>
+                                        <td>@product.Sum(p => p.ProductCount)</td>
+                                        <td><img src="~/Image/Product/@product.First().ImagePath" alt="@product.Key" width="100" height="100" /></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+                    <form id="form-@qrCodeId" method="post" asp-controller="AllBasket" asp-action="DeleteProducts">
+                        <input type="hidden" name="qrCodeId" value="@qrCodeId" />
+                        <button type="submit" class="btn btn-danger">Sil</button>
+                    </form>
+
+                </div>
+            </div>
+        }
+    </div>
+
+    <script>
+        function submitForm(qrCodeId) {
+            var form = document.getElementById('form-' + qrCodeId);
+            form.submit();
+
+            // Silme işlemi tamamlandığında div'i gizle
+            var row = document.getElementById('row-' + qrCodeId);
+            row.style.display = 'none';
+        }
+    </script>
+
+    <!-- Bootstrap JS ve bağımlılıkları -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
