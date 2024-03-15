@@ -207,3 +207,4 @@ C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\obj\Debug\net6.0\refint\Q
 C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\obj\Debug\net6.0\QrSystem.pdb
 C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\obj\Debug\net6.0\QrSystem.genruntimeconfig.cache
 C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\obj\Debug\net6.0\ref\QrSystem.dll
+C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\obj\Debug\net6.0\QrSystem.sourcelink.json

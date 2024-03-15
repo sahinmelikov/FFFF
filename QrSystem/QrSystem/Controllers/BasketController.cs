@@ -131,9 +131,10 @@ namespace QrSystem.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-
+        [HttpPost]
         public IActionResult RemoveItemFromBasket(int qrCodeId, int id)
         {
+            // Sepetten ürünü kaldır
             string basketCookieName = COOKIES_BASKET + "_" + qrCodeId;
             List<BasketVM> basketVMList = JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies[basketCookieName] ?? "[]");
 
@@ -141,14 +142,28 @@ namespace QrSystem.Controllers
             if (productToRemove != null)
             {
                 basketVMList.Remove(productToRemove);
-
                 Response.Cookies.Append(basketCookieName, JsonConvert.SerializeObject(basketVMList.OrderBy(s => s.ProductId)));
+            }
+
+            // Veritabanındaki siparişi güncelle
+            var ordersToUpdate = _appDbContext.SaxlanilanS
+                                .Where(o => o.QrCodeId == qrCodeId && o.ProductId == id && !o.IsDeleted).ToList();
+
+            if (ordersToUpdate.Any())
+            {
+                foreach (var order in ordersToUpdate)
+                {
+                    order.ProductCount = 0; // Ürün miktarını 0 yap
+                    order.IsDeleted = true;
+                }
+                _appDbContext.SaveChanges();
             }
 
             SetBasketItemCountInViewBag();
 
             return RedirectToAction("Index", new { qrCodeId });
         }
+
 
 
         [HttpPost]
@@ -201,7 +216,7 @@ namespace QrSystem.Controllers
 
             return RedirectToAction("Index", new { qrCodeId });
         }
-
+        [HttpPost]
         public IActionResult RemoveAllItemsFromBasket(int qrCodeId)
         {
             string basketCookieName = COOKIES_BASKET + "_" + qrCodeId;
@@ -209,8 +224,18 @@ namespace QrSystem.Controllers
             // Sepet öğelerini temizle
             Response.Cookies.Delete(basketCookieName);
 
+            // Veritabanındaki ilgili tüm ürün kayıtlarını güncelle
+            var productsInDb = _appDbContext.SaxlanilanS.Where(p => p.QrCodeId == qrCodeId).ToList();
+            foreach (var product in productsInDb)
+            {
+                product.ProductCount = 0;
+                product.IsDeleted = true;
+            }
+            _appDbContext.SaveChanges();
+
             return RedirectToAction("Index", new { qrCodeId });
         }
+
         [HttpPost]
         public IActionResult Checkout(int qrCodeId)
         {
@@ -223,63 +248,74 @@ namespace QrSystem.Controllers
             // urun.cshtml sayfasına yönlendir
             return RedirectToAction("Index", new {qrCodeId});
         }
-
         private void ConfirmAndSaveProducts(int qrCodeId, List<BasketİtemVM> approvedProducts)
         {
-            // Sepet ürünlerini onayla ve veritabanına kaydet
             foreach (var product in approvedProducts)
             {
-                SaxlanilanSifarish order = new SaxlanilanSifarish
-                {
-                    QrCodeId = qrCodeId,
-                    Name = product.Name,
-                    ProductId = product.ProductId,
-                    Description = product.Description,
-                    Price = product.Price,
-                    ProductCount = product.ProductCount,
-                    ImagePath = product.ImagePath,
-                    TableName = product.TableName
-                };
+                // Veritabanında ürün var mı ve silinmemiş mi diye kontrol et
+                var existingOrder = _appDbContext.SaxlanilanS
+                    .FirstOrDefault(o => o.ProductId == product.ProductId && o.QrCodeId == qrCodeId  && !o.IsDeleted);
 
-                // Siparişi veritabanına kaydet
-                _appDbContext.SaxlanilanS.Add(order);
+                if (existingOrder != null)
+                {
+                    // Ürün zaten varsa ve silinmemişse, miktarı gelen miktar ile güncelle
+                    existingOrder.ProductCount = product.ProductCount; // Doğrudan onaylanan miktarı ata
+                }
+                else
+                {
+                    // Eğer ürün veritabanında yoksa veya silinmişse, yeni bir kayıt ekle
+                    var newOrder = new SaxlanilanSifarish
+                    {
+                        QrCodeId = qrCodeId,
+                        Name = product.Name,
+                        ProductId = product.ProductId,
+                        Description = product.Description,
+                        Price = product.Price,
+                        ProductCount = product.ProductCount, // Onaylanan miktar
+                        ImagePath = product.ImagePath,
+                        TableName = product.TableName,
+                        IsDeleted = false // Yeni kayıtlar için IsDeleted varsayılan olarak false olmalı
+                    };
+                    _appDbContext.SaxlanilanS.Add(newOrder);
+                }
             }
 
+            // Değişiklikleri veritabanına kaydet
             _appDbContext.SaveChanges();
         }
 
 
-        public IActionResult Urun()
-        {
-            var viewModel = new UrunlerViewModel();
+        //public IActionResult Urun()
+        //{
+        //    var viewModel = new UrunlerViewModel();
 
-            foreach (var key in HttpContext.Session.Keys)
-            {
-                if (key.StartsWith("ApprovedProducts-"))
-                {
-                    var qrCodeId = int.Parse(key.Split('-')[1]);
-                    var productsJson = HttpContext.Session.GetString(key);
-                    var approvedProducts = JsonConvert.DeserializeObject<List<BasketİtemVM>>(productsJson);
+        //    foreach (var key in HttpContext.Session.Keys)
+        //    {
+        //        if (key.StartsWith("ApprovedProducts-"))
+        //        {
+        //            var qrCodeId = int.Parse(key.Split('-')[1]);
+        //            var productsJson = HttpContext.Session.GetString(key);
+        //            var approvedProducts = JsonConvert.DeserializeObject<List<BasketİtemVM>>(productsJson);
 
-                    // QR kodu ve ona ait ürünleri ViewModel'e ekleyin
-                    if (!viewModel.UrunlerByQrCodeAndTable.ContainsKey(qrCodeId))
-                    {
-                        viewModel.UrunlerByQrCodeAndTable[qrCodeId] = new Dictionary<string, List<BasketİtemVM>>();
-                    }
+        //            // QR kodu ve ona ait ürünleri ViewModel'e ekleyin
+        //            if (!viewModel.UrunlerByQrCodeAndTable.ContainsKey(qrCodeId))
+        //            {
+        //                viewModel.UrunlerByQrCodeAndTable[qrCodeId] = new Dictionary<string, List<BasketİtemVM>>();
+        //            }
 
-                    foreach (var product in approvedProducts)
-                    {
-                        if (!viewModel.UrunlerByQrCodeAndTable[qrCodeId].ContainsKey(product.TableName))
-                        {
-                            viewModel.UrunlerByQrCodeAndTable[qrCodeId][product.TableName] = new List<BasketİtemVM>();
-                        }
-                        viewModel.UrunlerByQrCodeAndTable[qrCodeId][product.TableName].Add(product);
-                    }
-                }
-            }
+        //            foreach (var product in approvedProducts)
+        //            {
+        //                if (!viewModel.UrunlerByQrCodeAndTable[qrCodeId].ContainsKey(product.TableName))
+        //                {
+        //                    viewModel.UrunlerByQrCodeAndTable[qrCodeId][product.TableName] = new List<BasketİtemVM>();
+        //                }
+        //                viewModel.UrunlerByQrCodeAndTable[qrCodeId][product.TableName].Add(product);
+        //            }
+        //        }
+        //    }
 
-            return View(viewModel); // Burada viewModel nesnesini görünüme geçirin
-        }
+        //    return View(viewModel); // Burada viewModel nesnesini görünüme geçirin
+        //}
 
         private void SaveApprovedProductsToSession(int qrCodeId, List<BasketİtemVM> approvedProducts)
         {
@@ -303,7 +339,7 @@ namespace QrSystem.Controllers
                 if (product != null)
                 {
                     var tableName = item.TableNumber.ToString();
-                    var existingItem = basketItemVMs.FirstOrDefault(b => b.ProductId == product.Id && b.TableName == tableName);
+                    var existingItem = basketItemVMs.FirstOrDefault(b => b.ProductId == product.Id);
                     if (existingItem != null)
                     {
                         existingItem.ProductCount += item.Count; // Ürün zaten varsa miktarını artır

@@ -18,6 +18,7 @@ namespace QrSystem.Models
         public string ImagePath { get; set; }
 
         public int ProductCount { get; set; }
+       
         public List<BasketİtemVM> OrderedProducts { get; set; }
     }
 }

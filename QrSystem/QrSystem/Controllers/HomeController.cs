@@ -52,7 +52,7 @@ namespace QrSystem.Controllers
             else
             {
                 // qrCodeId değeri yoksa ve daha önce de saklanmamışsa, varsayılan davranış
-                return RedirectToAction("ErrorPage"); // Varsayılan davranış olarak bir hata sayfasına yönlendirme
+                return View("ErrorPage"); // Varsayılan davranış olarak bir hata sayfasına yönlendirme
             }
         }
 

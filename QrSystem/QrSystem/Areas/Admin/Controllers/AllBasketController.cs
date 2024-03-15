@@ -84,7 +84,9 @@ namespace QrSystem.Areas.Admin.Controllers
                     Price = product.Price,
                     ProductCount = product.ProductCount,
                     ImagePath = product.ImagePath,
-                    TableName = product.TableName
+                    TableName = product.TableName,
+                   
+                    
                 });
             }
 
@@ -117,6 +119,7 @@ namespace QrSystem.Areas.Admin.Controllers
                     ProductCount = product.ProductCount,
                     ImagePath = product.ImagePath,
                     TableName = tableName
+                    
                 };
 
                 if (!approvedProductsByQrCodeAndTable.ContainsKey(qrCodeId))

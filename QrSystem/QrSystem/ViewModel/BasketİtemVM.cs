@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using QrSystem.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace QrSystem.ViewModel
 {
     public class BasketİtemVM
     {
+    
         public int Id { get; set; }
         
         public string Name { get; set; }
@@ -17,7 +19,7 @@ namespace QrSystem.ViewModel
    
         public bool IsApproved { get; set; }
         public string ImagePath { get; set; }
-   
+        public string OrderNote { get; set; }
         public int ProductCount { get; set; }
     }
 }
