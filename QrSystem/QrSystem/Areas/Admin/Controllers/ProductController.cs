@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QrSystem.DAL;
 using QrSystem.Models;
+using QrSystem.Models.Auth;
 using QrSystem.ViewModel;
 using System;
+using System.Security.Claims;
 
 namespace QrSystem.Areas.Admin.Controllers
 {
@@ -13,19 +16,24 @@ namespace QrSystem.Areas.Admin.Controllers
     [Authorize(Roles = "Admin")]
     public class ProductController: Controller
     {
+        private readonly UserManager<AppUser> _userManager;
         readonly AppDbContext _context;
         readonly IWebHostEnvironment _env;
-        public ProductController(AppDbContext context, IWebHostEnvironment env)
+        public ProductController(AppDbContext context, IWebHostEnvironment env, UserManager<AppUser> userManager)
         {
             _context = context;
             _env = env;
+            _userManager = userManager;
         }
-        public IActionResult Index(int id)
+        public IActionResult Index()
         {
+            // Kullanıcının bağlı olduğu restoranın ID'sini alın
+            int restorantId = GetCurrentUserRestorantId();
+
             // İstenen restoranın ID'sine sahip olan restoranı ve onun ürünlerini getirin
             var restoran = _context.Restorant
                                    .Include(r => r.Products) // Restoranın ürünlerini de getirin
-                                   .FirstOrDefault(r => r.Id == id);
+                                   .FirstOrDefault(r => r.Id == restorantId);
 
             if (restoran == null)
             {
@@ -36,6 +44,20 @@ namespace QrSystem.Areas.Admin.Controllers
 
             return View(restoran.Products);
         }
+
+        // Kullanıcının bağlı olduğu restoranın ID'sini döndüren yardımcı bir metot
+        private int GetCurrentUserRestorantId()
+        {
+            // Kullanıcının kimliğini alın
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Kullanıcının bağlı olduğu restoranın ID'sini veritabanından alın
+            var user = _userManager.FindByIdAsync(userId).Result;
+            var restorantId = user.RestorantId;
+
+            return restorantId.HasValue ? restorantId.Value : 0; // Varsayılan değer olarak 0 kullanıldı, siz istediğiniz bir değeri verebilirsiniz.
+        }
+
 
         public IActionResult Create()
         {

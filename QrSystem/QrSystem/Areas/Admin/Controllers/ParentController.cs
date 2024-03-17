@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QrSystem.DAL;
 using QrSystem.Models;
 using QrSystem.ViewModel;
@@ -6,6 +7,7 @@ using QrSystem.ViewModel;
 namespace QrSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Moderator")]
     public class ParentController: Controller
     {
         readonly AppDbContext _context;

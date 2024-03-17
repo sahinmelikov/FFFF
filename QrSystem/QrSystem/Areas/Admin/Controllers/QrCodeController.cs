@@ -1,25 +1,54 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QrSystem.DAL;
 using QrSystem.Models;
+using QrSystem.Models.Auth;
 using QrSystem.ViewModel;
+using System.Security.Claims;
 
 namespace QrSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class QrCodeController: Controller
     {
+        private readonly UserManager<AppUser> _userManager;
         readonly AppDbContext _context;
         readonly IWebHostEnvironment _env;
-        public QrCodeController(AppDbContext context, IWebHostEnvironment env)
+        public QrCodeController(AppDbContext context, IWebHostEnvironment env, UserManager<AppUser> userManager)
         {
             _context = context;
             _env = env;
+            _userManager = userManager;
         }
         public IActionResult Index()
         {
-            return View(_context.QrCodes.Include(d=>d.Restorant).ToList());
+            // Kullanıcının bağlı olduğu restoranın ID'sini alın
+            int restorantId = GetCurrentUserRestorantId();
+
+            // Kullanıcının bağlı olduğu restorana ait QR kodlarını getirin
+            var qrCodes = _context.QrCodes.Include(q => q.Restorant)
+                                          .Where(q => q.RestorantId == restorantId)
+                                          .ToList();
+
+            return View(qrCodes);
         }
+
+        // Kullanıcının bağlı olduğu restoranın ID'sini döndüren yardımcı bir metot
+        private int GetCurrentUserRestorantId()
+        {
+            // Kullanıcının kimliğini alın
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Kullanıcının bağlı olduğu restoranın ID'sini veritabanından alın
+            var user = _userManager.FindByIdAsync(userId).Result;
+            var restorantId = user.RestorantId;
+
+            return restorantId.HasValue ? restorantId.Value : 0; // Varsayılan değer olarak 0 kullanıldı, siz istediğiniz bir değeri verebilirsiniz.
+        }
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id is null) return BadRequest();

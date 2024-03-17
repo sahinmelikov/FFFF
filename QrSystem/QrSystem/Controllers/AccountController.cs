@@ -77,38 +77,28 @@ namespace QrSystem.Controllers
         public async Task<IActionResult> Login(LoginVM login, string? ReturnUrl)
         {
             if (!ModelState.IsValid) return View(login);
-
-            // Kullanıcının giriş bilgilerini kontrol et
             AppUser user = await _userManager.FindByEmailAsync(login.Email);
-            if (user == null || !await _userManager.CheckPasswordAsync(user, login.Password))
+            if (user == null)
             {
                 ModelState.AddModelError("", "Email or Password is wrong!");
                 return View(login);
             }
+            Microsoft.AspNetCore.Identity.SignInResult signinResult =
+                await _signInManager.CheckPasswordSignInAsync(user, login.Password, false);
 
-            // Kullanıcının giriş yaptığında hangi restorana ait olduğunu belirleyin
-            Restorant restorant = _appDbContext.Restorant.FirstOrDefault(r => r.Email == login.Email);
-            if (restorant == null)
+            if (!signinResult.Succeeded)
             {
-                // Eğer restoran bulunamazsa, hata mesajı gösterin
-                ModelState.AddModelError("", "No matching restaurant found!");
+                ModelState.AddModelError("", "Email or Password is wrong!");
                 return View(login);
             }
+            await _signInManager.SignInAsync(user, login.RememberMe);
+            if (Url.IsLocalUrl(ReturnUrl))
+            {
+                return Redirect(ReturnUrl);
+            }
 
-            // Kullanıcının rolüne ve restoran ID'sine göre uygun admin paneline yönlendirin
-            if (await _userManager.IsInRoleAsync(user, "Admin") && user.RestorantId == restorant.Id)
-            {
-                // Kullanıcının giriş yaptıktan sonra admin paneline yönlendirin
-                return RedirectToAction("Index", "Product","Admin");
-            }
-            else
-            {
-                // Kullanıcının rolüne veya restoranına uygun bir hata mesajı gösterin
-                ModelState.AddModelError("", "You are not authorized to access this admin panel!");
-                return View(login);
-            }
+            return RedirectToAction("Index", "Restorant", new { area = "Admin" });
         }
-
 
         public async Task<IActionResult> LogOut()
         {

@@ -9,7 +9,7 @@ using QrSystem.ViewModel;
 namespace QrSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Moderator")]
+    [Authorize(Roles = "Admin")]
     public class AllBasketController: Controller
     {
         private const string COOKIES_BASKET = "basketVM";
@@ -97,90 +97,90 @@ namespace QrSystem.Areas.Admin.Controllers
 
 
 
-        private Dictionary<int, Dictionary<string, List<BasketİtemVM>>> GetApprovedProducts()
-        {
-            var approvedProductsByQrCodeAndTable = new Dictionary<int, Dictionary<string, List<BasketİtemVM>>>();
+        //private Dictionary<int, Dictionary<string, List<BasketİtemVM>>> GetApprovedProducts()
+        //{
+        //    var approvedProductsByQrCodeAndTable = new Dictionary<int, Dictionary<string, List<BasketİtemVM>>>();
 
-            // Burada, onaylanmış ürünleri sakladığınız mekanizmayı kullanarak veriyi çekin
-            // Örneğin, veritabanından onaylanmış ürünleri çekin
-            // Örnek bir sorgu:
-            var approvedProducts = _appDbContext.SaxlanilanS.ToList();
+        //    // Burada, onaylanmış ürünleri sakladığınız mekanizmayı kullanarak veriyi çekin
+        //    // Örneğin, veritabanından onaylanmış ürünleri çekin
+        //    // Örnek bir sorgu:
+        //    var approvedProducts = _appDbContext.SaxlanilanS.ToList();
 
-            // Her bir onaylanmış ürünü uygun şekilde yerleştirin
-            // Örneğin:
-            foreach (var product in approvedProducts)
-            {
-                var qrCodeId = product.QrCodeId;
-                var tableName = product.TableName;
-                var basketItem = new BasketİtemVM
-                {
-                    Name = product.Name,
-                    ProductId = product.Id,
-                    Description = product.Description,
-                    Price = product.Price,
-                    ProductCount = product.ProductCount,
-                    ImagePath = product.ImagePath,
-                    TableName = tableName
+        //    // Her bir onaylanmış ürünü uygun şekilde yerleştirin
+        //    // Örneğin:
+        //    foreach (var product in approvedProducts)
+        //    {
+        //        var qrCodeId = product.QrCodeId;
+        //        var tableName = product.TableName;
+        //        var basketItem = new BasketİtemVM
+        //        {
+        //            Name = product.Name,
+        //            ProductId = product.Id,
+        //            Description = product.Description,
+        //            Price = product.Price,
+        //            ProductCount = product.ProductCount,
+        //            ImagePath = product.ImagePath,
+        //            TableName = tableName
                     
-                };
+        //        };
 
-                if (!approvedProductsByQrCodeAndTable.ContainsKey(qrCodeId))
-                {
-                    approvedProductsByQrCodeAndTable[qrCodeId] = new Dictionary<string, List<BasketİtemVM>>();
-                }
+        //        if (!approvedProductsByQrCodeAndTable.ContainsKey(qrCodeId))
+        //        {
+        //            approvedProductsByQrCodeAndTable[qrCodeId] = new Dictionary<string, List<BasketİtemVM>>();
+        //        }
 
-                if (!approvedProductsByQrCodeAndTable[qrCodeId].ContainsKey(tableName))
-                {
-                    approvedProductsByQrCodeAndTable[qrCodeId][tableName] = new List<BasketİtemVM>();
-                }
+        //        if (!approvedProductsByQrCodeAndTable[qrCodeId].ContainsKey(tableName))
+        //        {
+        //            approvedProductsByQrCodeAndTable[qrCodeId][tableName] = new List<BasketİtemVM>();
+        //        }
 
-                approvedProductsByQrCodeAndTable[qrCodeId][tableName].Add(basketItem);
-            }
+        //        approvedProductsByQrCodeAndTable[qrCodeId][tableName].Add(basketItem);
+        //    }
 
-            return approvedProductsByQrCodeAndTable;
-        }
+        //    return approvedProductsByQrCodeAndTable;
+        //}
 
 
-        private List<SaxlanilanSifarish> GetProductsInCart(int qrCodeId)
-        {
-            List<SaxlanilanSifarish> basketItemVMs = new List<SaxlanilanSifarish>();
+        //private List<SaxlanilanSifarish> GetProductsInCart(int qrCodeId)
+        //{
+        //    List<SaxlanilanSifarish> basketItemVMs = new List<SaxlanilanSifarish>();
 
-            var basketCookieName = COOKIES_BASKET + "_" + qrCodeId; // Her QR kodu için farklı bir cookie adı oluştur
-            List<SaxlanilanSifarish> basketVMs = JsonConvert.DeserializeObject<List<SaxlanilanSifarish>>(Request.Cookies[basketCookieName] ?? "[]");
+        //    var basketCookieName = COOKIES_BASKET + "_" + qrCodeId; // Her QR kodu için farklı bir cookie adı oluştur
+        //    List<SaxlanilanSifarish> basketVMs = JsonConvert.DeserializeObject<List<SaxlanilanSifarish>>(Request.Cookies[basketCookieName] ?? "[]");
 
-            foreach (var item in basketVMs)
-            {
-                Product product = _appDbContext.Products
-                    .Include(p => p.Tables)
-                    .FirstOrDefault(p => p.Id == item.ProductId);
+        //    foreach (var item in basketVMs)
+        //    {
+        //        Product product = _appDbContext.Products
+        //            .Include(p => p.Tables)
+        //            .FirstOrDefault(p => p.Id == item.ProductId);
 
-                if (product != null)
-                {
-                    var tableName = item.TableName.ToString();
-                    var existingItem = basketItemVMs.FirstOrDefault(b => b.ProductId == product.Id && b.TableName == tableName);
-                    if (existingItem != null)
-                    {
-                        existingItem.ProductCount += item.ProductCount; // Ürün zaten varsa miktarını artır
-                    }
-                    else
-                    {
-                        basketItemVMs.Add(new SaxlanilanSifarish
-                        {
-                            DateTime= DateTime.Now,
-                            Name = product.Name,
-                            ProductId = product.Id,
-                            Description = product.Description,
-                            Price = product.Price,
-                            ProductCount = item.ProductCount,
-                            ImagePath = product.ImagePath,
-                            TableName = tableName
-                        });
-                    }
-                }
-            }
+        //        if (product != null)
+        //        {
+        //            var tableName = item.TableName.ToString();
+        //            var existingItem = basketItemVMs.FirstOrDefault(b => b.ProductId == product.Id && b.TableName == tableName);
+        //            if (existingItem != null)
+        //            {
+        //                existingItem.ProductCount += item.ProductCount; // Ürün zaten varsa miktarını artır
+        //            }
+        //            else
+        //            {
+        //                basketItemVMs.Add(new SaxlanilanSifarish
+        //                {
+        //                    DateTime= DateTime.Now,
+        //                    Name = product.Name,
+        //                    ProductId = product.Id,
+        //                    Description = product.Description,
+        //                    Price = product.Price,
+        //                    ProductCount = item.ProductCount,
+        //                    ImagePath = product.ImagePath,
+        //                    TableName = tableName
+        //                });
+        //            }
+        //        }
+        //    }
             
-            _appDbContext.SaveChanges();
-            return basketItemVMs;
-        }
+        //    _appDbContext.SaveChanges();
+        //    return basketItemVMs;
+        //}
     }
 }
