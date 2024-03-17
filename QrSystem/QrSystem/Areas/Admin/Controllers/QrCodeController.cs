@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QrSystem.DAL;
 using QrSystem.Models;
 using QrSystem.ViewModel;
@@ -17,7 +18,7 @@ namespace QrSystem.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            return View(_context.QrCodes.ToList());
+            return View(_context.QrCodes.Include(d=>d.Restorant).ToList());
         }
         public async Task<IActionResult> Delete(int? id)
         {
@@ -28,16 +29,28 @@ namespace QrSystem.Areas.Admin.Controllers
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
+        [HttpGet]
         public IActionResult Create()
         {
+
             return View();
         }
         [HttpPost]
         public async Task<IActionResult> Create(QrCodeVM qrVM)
         {
-            QrCode qrCode = new QrCode { QRCode = qrVM.QrCode,DateTime=DateTime.Now};
+          
+            // QrCode nesnesini oluştururken Restorant özelliğine bu restorantı atayın
+            QrCode qrCode = new QrCode
+            {
+                QRCode = qrVM.QrCode,
+                DateTime = DateTime.Now,
+                RestorantId = qrVM.RestorantId
+            };
+
+            // QrCode nesnesini veritabanına ekleyin
             _context.QrCodes.Add(qrCode);
             _context.SaveChanges();
+
             return RedirectToAction(nameof(Index));
         }
     }

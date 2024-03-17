@@ -68,6 +68,15 @@
             row.style.display = 'none';
         }
     </script>
+    <script>
+        // Sayfanın 5 saniyede bir yenilenmesini sağlayan fonksiyon
+        function refreshPage() {
+            location.reload(); // Sayfayı yenile
+        }
+
+        // 5 saniyede bir 'refreshPage' fonksiyonunu çağıran setInterval fonksiyonu
+        setInterval(refreshPage, 5000); // 5000 milisaniye = 5 saniye
+    </script>
 
     <!-- Bootstrap JS ve bağımlılıkları -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

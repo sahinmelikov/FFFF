@@ -16,7 +16,6 @@ namespace QrSystem.Controllers
             _appDbContext = appDbContext;
         }
         [HttpGet]
-
         public IActionResult Index(int? qrCodeId) // qrCodeId URL'den gelecek
         {
             int? sessionQrCodeId = HttpContext.Session.GetInt32("QrCodeId");
@@ -35,11 +34,23 @@ namespace QrSystem.Controllers
 
                 if (masa != null)
                 {
-                    HomeVM homeVM = new HomeVM()
+                    // QR kodunun restoran ID'sini al
+                    var restoranId = _appDbContext.QrCodes
+                        .Where(q => q.Id == qrCodeId)
+                        .Select(q => q.RestorantId)
+                        .FirstOrDefault();
+
+                    // Restoran ID'sine sahip olan ürünleri getir
+                    var products = _appDbContext.Products
+                        .Where(p => p.RestorantId == restoranId)
+                        .ToList();
+
+                    var homeVM = new HomeVM()
                     {
-                        Product = _appDbContext.Products.ToList(),
+                        Product = products,
                         RestourantTables = _appDbContext.Tables.Where(d => d.QrCodeId == qrCodeId.Value).ToList(),
                         ParentsCategory = _appDbContext.ParentsCategories.ToList(),
+                        Restorants = _appDbContext.Restorant.ToList()
                     };
                     return View(homeVM);
                 }
@@ -57,7 +68,8 @@ namespace QrSystem.Controllers
         }
 
 
-        
+
+
 
         public IActionResult Sebet()
         {

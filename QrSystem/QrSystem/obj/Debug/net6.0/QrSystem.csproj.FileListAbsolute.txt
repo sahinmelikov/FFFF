@@ -208,3 +208,8 @@ C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\obj\Debug\net6.0\QrSystem
 C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\obj\Debug\net6.0\QrSystem.genruntimeconfig.cache
 C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\obj\Debug\net6.0\ref\QrSystem.dll
 C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\obj\Debug\net6.0\QrSystem.sourcelink.json
+C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
+C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
+C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
+C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
+C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll

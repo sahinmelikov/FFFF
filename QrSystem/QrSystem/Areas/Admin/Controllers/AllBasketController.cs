@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using QrSystem.DAL;
@@ -8,6 +9,7 @@ using QrSystem.ViewModel;
 namespace QrSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Moderator")]
     public class AllBasketController: Controller
     {
         private const string COOKIES_BASKET = "basketVM";

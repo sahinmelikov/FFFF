@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using QrSystem.DAL;
@@ -9,6 +10,7 @@ using System;
 namespace QrSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class ProductController: Controller
     {
         readonly AppDbContext _context;
@@ -18,10 +20,23 @@ namespace QrSystem.Areas.Admin.Controllers
             _context = context;
             _env = env;
         }
-        public IActionResult Index() 
+        public IActionResult Index(int id)
         {
-            return View(_context.Products.ToList());
+            // İstenen restoranın ID'sine sahip olan restoranı ve onun ürünlerini getirin
+            var restoran = _context.Restorant
+                                   .Include(r => r.Products) // Restoranın ürünlerini de getirin
+                                   .FirstOrDefault(r => r.Id == id);
+
+            if (restoran == null)
+            {
+                // Eğer istenen restoran bulunamazsa, hata mesajı gösterin
+                ViewBag.ErrorMessage = "No matching restaurant found!";
+                return View();
+            }
+
+            return View(restoran.Products);
         }
+
         public IActionResult Create()
         {
             return View();

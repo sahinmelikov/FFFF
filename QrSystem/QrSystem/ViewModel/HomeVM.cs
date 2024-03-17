@@ -7,6 +7,7 @@ namespace QrSystem.ViewModel
         public List<QrCode> QrCode { get; set; }
         public List<Product> Product { get; set; }
         public List<RestourantTables> RestourantTables { get; set; }
+        public List<Restorant>Restorants { get; set; }
         public int QrCodeId { get;set; }
         public int ProductId { get;set; }
         public RestourantTables SelectedTable { get; set; }

@@ -12,5 +12,7 @@ namespace QrSystem.Models
         public List<RestourantTables> Tables { get; set; }
         public ParentCategory ParentsCategory { get; set; }
         public int ParentsCategoryId { get; set; }
+        public Restorant Restorant { get; set; }
+        public int? RestorantId { get; set; }    
     }
 }

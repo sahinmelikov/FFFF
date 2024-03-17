@@ -1,17 +1,38 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using QrSystem.DAL;
+using QrSystem.Models.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddIdentity<AppUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.Configure<IdentityOptions>(opt =>
+{
+    opt.Password.RequiredLength = 8;
+    opt.Password.RequireNonAlphanumeric = true;
+    opt.Password.RequireDigit = true;
+    opt.Password.RequireLowercase = true;
+    opt.Password.RequireUppercase = true;
+
+    opt.User.RequireUniqueEmail = true;
+
+    opt.Lockout.MaxFailedAccessAttempts = 3;
+    opt.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(3);
+    opt.Lockout.AllowedForNewUsers = true;
+});
 
 // Entity Framework Core kullanarak veritabaný baðlantýsýný yapýlandýrýn
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer("Data Source=SQL5106.site4now.net;Initial Catalog=db_aa64c4_qrsystem;User Id=db_aa64c4_qrsystem_admin;Password=ferid2003");
+    options.EnableSensitiveDataLogging();
 });
 
 
@@ -24,7 +45,16 @@ builder.Services.AddSession(options =>
 });
 builder.Services.AddHttpContextAccessor();
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
+    if (!await roleManager.RoleExistsAsync("USER"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("USER"));
+    }
+}
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -37,12 +67,15 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseSession(); // Middleware'yi buraya taþýdýk
 app.UseEndpoints(endpoints =>
 {
+   
+
+
     endpoints.MapControllerRoute(
         name: "areas",
         pattern: "{area:exists}/{controller=Product}/{action=Index}/{qrCodeid?}");

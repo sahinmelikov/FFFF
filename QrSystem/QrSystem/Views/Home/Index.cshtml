@@ -2,7 +2,8 @@
 @model HomeVM
 @using Microsoft.AspNetCore.Http
 @{
-    var qrCodeIdValue = ViewBag.QrCodeId ?? "";
+    var qrCodeIdValue = ViewBag.QrCodeId ?? "" ;
+  
 }
 <!DOCTYPE html>
 <html lang="az">
@@ -183,6 +184,8 @@
                                 </div>
                             </div>
                         </div>
+
+                      
                         <style>
                             /* CSS Dosyanızda */
 
@@ -204,6 +207,7 @@
             <section class="section-content">
                 <div class="container">
                     <div class="row">
+                      
                         <div class=" mr-auto ml-auto">
 
 
@@ -339,7 +343,7 @@
                                     .product-image {
                                         width: 50%;
                                         max-width: 150px;
-                                        height: 100px;
+                                        height: auto;
                                     }
 
                                     .product-details {
@@ -406,10 +410,11 @@
                                             <p></p>
                                         </div>
                                         <div class="row">
-                                            @if (item.Products != null)
+                                            @if (item.Products != null )
                                             {
                                                 @foreach (var item1 in item.Products)
                                                 {
+                                                      
                                                     <div class="desk col-lg-6 col-md-12" data-modifmap="">
                                                         <div class="product-container">
                                                             <div class="product-image">
