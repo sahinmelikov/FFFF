@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QrSystem.DAL;
 using QrSystem.Models;
 using QrSystem.Models.Auth;
@@ -29,7 +30,7 @@ namespace QrSystem.Areas.Admin.Controllers
             int restorantId = GetCurrentUserRestorantId();
 
             // Kullanıcının bağlı olduğu restorana ait masaları getirin
-            var tables = _context.Tables.Where(t => t.QrCode.RestorantId == restorantId).ToList();
+            var tables = _context.Tables.Include(d=>d.QrCode.Restorant).Where(t => t.QrCode.RestorantId == restorantId).ToList();
 
             return View(tables);
         }
@@ -48,11 +49,27 @@ namespace QrSystem.Areas.Admin.Controllers
         }
         public IActionResult Create()
         {
-            return View();
+            // Kullanıcının bağlı olduğu restoranın ID'sini alın
+            int restorantId = GetCurrentUserRestorantId();
+
+            // Restoran ID'si bulunamazsa hata mesajı döndürün veya uygun bir işlem yapın
+            if (restorantId == 0)
+            {
+                // Hata mesajı göstermek için ModelState kullanabilirsiniz
+                ModelState.AddModelError(string.Empty, "Restoran bulunamadı.");
+                return View();
+            }
+
+            // Restoran ID'si bulunduysa, yeni bir QR kodu oluşturmak için kullanabiliriz
+            var qrVM = new TableVM { RestorantId = restorantId };
+            return View(qrVM);
         }
         [HttpPost]
         public async Task<IActionResult> Create(TableVM tableVM)
         {
+            // Kullanıcının bağlı olduğu restoranın ID'sini alın
+            int restorantId = GetCurrentUserRestorantId();
+            
             RestourantTables tables = new RestourantTables { QrCodeId = tableVM.QrCodeId, TableNumber = tableVM.TableNumber, DateTime = DateTime.Now  };
             _context.Tables.Add(tables);
             _context.SaveChanges();

@@ -80,6 +80,14 @@ app.UseEndpoints(endpoints =>
         name: "areas",
         pattern: "{area:exists}/{controller=Product}/{action=Index}/{qrCodeid?}");
 
+   
     endpoints.MapDefaultControllerRoute();
+});
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+      name: "areas1",
+      pattern: "{area:exists}/{controller=Restorant}/{action=Index}/{id?}"
+  );
 });
 app.Run();

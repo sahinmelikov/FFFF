@@ -7,7 +7,7 @@ using QrSystem.ViewModel;
 namespace QrSystem.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "Moderator")]
+    
     public class ParentController: Controller
     {
         readonly AppDbContext _context;

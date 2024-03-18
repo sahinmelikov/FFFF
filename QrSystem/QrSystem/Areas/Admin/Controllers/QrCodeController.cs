@@ -61,19 +61,33 @@ namespace QrSystem.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            // Kullanıcının bağlı olduğu restoranın ID'sini alın
+            int restorantId = GetCurrentUserRestorantId();
 
-            return View();
+            // Restoran ID'si bulunamazsa hata mesajı döndürün veya uygun bir işlem yapın
+            if (restorantId == 0)
+            {
+                // Hata mesajı göstermek için ModelState kullanabilirsiniz
+                ModelState.AddModelError(string.Empty, "Restoran bulunamadı.");
+                return View();
+            }
+
+            // Restoran ID'si bulunduysa, yeni bir QR kodu oluşturmak için kullanabiliriz
+            var qrVM = new QrCodeVM { RestorantId = restorantId };
+            return View(qrVM);
         }
         [HttpPost]
         public async Task<IActionResult> Create(QrCodeVM qrVM)
         {
-          
-            // QrCode nesnesini oluştururken Restorant özelliğine bu restorantı atayın
+            // Kullanıcının bağlı olduğu restoranın ID'sini alın
+            int restorantId = GetCurrentUserRestorantId();
+
+            // QrCode nesnesini oluştururken RestorantId özelliğine bu restoranı atayın
             QrCode qrCode = new QrCode
             {
                 QRCode = qrVM.QrCode,
                 DateTime = DateTime.Now,
-                RestorantId = qrVM.RestorantId
+                RestorantId = restorantId // Kullanıcının bağlı olduğu restoranın ID'sini kullanın
             };
 
             // QrCode nesnesini veritabanına ekleyin
@@ -82,5 +96,6 @@ namespace QrSystem.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
     }
 }

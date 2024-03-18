@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\QrSystem.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\165190c4-90bb-4d4a-b1b5-f5a1030a916eCiyerkabab.jpg",
+      "PackagePath": "staticwebassets\\Image\\Product\\165190c4-90bb-4d4a-b1b5-f5a1030a916eCiyerkabab.jpg"
+    },
+    {
       "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\1688e29c-64ec-481f-acd1-eb8ea783cddc3-4-scaled-e1585829325535-1.jpg",
       "PackagePath": "staticwebassets\\Image\\Product\\1688e29c-64ec-481f-acd1-eb8ea783cddc3-4-scaled-e1585829325535-1.jpg"
     },
@@ -37,6 +41,14 @@
       "PackagePath": "staticwebassets\\Image\\Product\\5f86e2c2-ccd2-4e7e-b5f1-52fd8ef3405evegetarian-turkish-pide-recipe-8.jpg"
     },
     {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\5fa7c22d-1444-4d21-8eed-0545ddec63f8Terevezpizza.jpg",
+      "PackagePath": "staticwebassets\\Image\\Product\\5fa7c22d-1444-4d21-8eed-0545ddec63f8Terevezpizza.jpg"
+    },
+    {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\632496b8-d30b-4685-ad07-aec393264a89quy.jpg",
+      "PackagePath": "staticwebassets\\Image\\Product\\632496b8-d30b-4685-ad07-aec393264a89quy.jpg"
+    },
+    {
       "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\6526cf5e-e627-49bc-8834-2f0599a1ed8avegetarian-turkish-pide-recipe-8.jpg",
       "PackagePath": "staticwebassets\\Image\\Product\\6526cf5e-e627-49bc-8834-2f0599a1ed8avegetarian-turkish-pide-recipe-8.jpg"
     },
@@ -53,12 +65,28 @@
       "PackagePath": "staticwebassets\\Image\\Product\\8afe03cb-5df9-463b-9d35-071a974c722dmonyoo.jpg"
     },
     {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\8f1d6ad6-faff-4449-ae62-dfe9935cd4abCiyerkabab.jpg",
+      "PackagePath": "staticwebassets\\Image\\Product\\8f1d6ad6-faff-4449-ae62-dfe9935cd4abCiyerkabab.jpg"
+    },
+    {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\9943873b-ae27-4160-9552-3967dbc3287e1501401388_1484430168_pizza1.jpg",
+      "PackagePath": "staticwebassets\\Image\\Product\\9943873b-ae27-4160-9552-3967dbc3287e1501401388_1484430168_pizza1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\Ciyerkabab2.jpg",
+      "PackagePath": "staticwebassets\\Image\\Product\\Ciyerkabab2.jpg"
+    },
+    {
       "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\Plov.jpg",
       "PackagePath": "staticwebassets\\Image\\Product\\Plov.jpg"
     },
     {
       "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\SU.jpg",
       "PackagePath": "staticwebassets\\Image\\Product\\SU.jpg"
+    },
+    {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\a5be8a89-e851-4c0b-a319-91349b7b3016margaritta-pizza-tomatoes-basil-cheese-17834981.webp",
+      "PackagePath": "staticwebassets\\Image\\Product\\a5be8a89-e851-4c0b-a319-91349b7b3016margaritta-pizza-tomatoes-basil-cheese-17834981.webp"
     },
     {
       "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\b0b532b5-25b9-4986-baaa-7135a4aafec5vegetarian-turkish-pide-recipe-8.jpg",
@@ -73,12 +101,52 @@
       "PackagePath": "staticwebassets\\Image\\Product\\coca-cola.jpg"
     },
     {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\dd4136af-0aba-402c-a098-05cce67c739fkendcol.jpg",
+      "PackagePath": "staticwebassets\\Image\\Product\\dd4136af-0aba-402c-a098-05cce67c739fkendcol.jpg"
+    },
+    {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\e1a69892-e002-4a0c-abb8-82a89a0ed4dfetlipizza.jpg",
+      "PackagePath": "staticwebassets\\Image\\Product\\e1a69892-e002-4a0c-abb8-82a89a0ed4dfetlipizza.jpg"
+    },
+    {
       "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\ebb8b7f7-ec6c-4e6b-a6bd-b7520f0a5b2bpiza.jpg",
       "PackagePath": "staticwebassets\\Image\\Product\\ebb8b7f7-ec6c-4e6b-a6bd-b7520f0a5b2bpiza.jpg"
     },
     {
       "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Image\\Product\\vegetarian-turkish-pide-recipe-8.jpg",
       "PackagePath": "staticwebassets\\Image\\Product\\vegetarian-turkish-pide-recipe-8.jpg"
+    },
+    {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Restorant\\Image\\62a39377-a6a2-4bff-9057-3a2e2dd4a228Ozsut12.jpg",
+      "PackagePath": "staticwebassets\\Restorant\\Image\\62a39377-a6a2-4bff-9057-3a2e2dd4a228Ozsut12.jpg"
+    },
+    {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Restorant\\Image\\74d8e5ef-465e-405b-b756-c8a4c8b4f277logo (5).png",
+      "PackagePath": "staticwebassets\\Restorant\\Image\\74d8e5ef-465e-405b-b756-c8a4c8b4f277logo (5).png"
+    },
+    {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Restorant\\Image\\87da50f7-dd76-4dae-a213-75e15e62b33flogo (5).png",
+      "PackagePath": "staticwebassets\\Restorant\\Image\\87da50f7-dd76-4dae-a213-75e15e62b33flogo (5).png"
+    },
+    {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Restorant\\Image\\VilagePro.png",
+      "PackagePath": "staticwebassets\\Restorant\\Image\\VilagePro.png"
+    },
+    {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Restorant\\Image\\a8ee3cfc-70f9-4f3f-a50f-c1c6ffa8e680logo (5).png",
+      "PackagePath": "staticwebassets\\Restorant\\Image\\a8ee3cfc-70f9-4f3f-a50f-c1c6ffa8e680logo (5).png"
+    },
+    {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Restorant\\Image\\b5fc4e4d-951b-466f-ac1c-3fc06a48d08dlogo (5).png",
+      "PackagePath": "staticwebassets\\Restorant\\Image\\b5fc4e4d-951b-466f-ac1c-3fc06a48d08dlogo (5).png"
+    },
+    {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Restorant\\Image\\f254838d-a700-4731-807f-bdfe500f57adlogo (5).png",
+      "PackagePath": "staticwebassets\\Restorant\\Image\\f254838d-a700-4731-807f-bdfe500f57adlogo (5).png"
+    },
+    {
+      "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\Restorant\\Image\\mado13.jpg",
+      "PackagePath": "staticwebassets\\Restorant\\Image\\mado13.jpg"
     },
     {
       "Id": "C:\\Users\\sahin\\Desktop\\QrSystem-main\\QrSystem\\QrSystem\\wwwroot\\admin\\template\\css\\maps\\style.css.map",

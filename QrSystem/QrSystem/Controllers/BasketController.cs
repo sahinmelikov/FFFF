@@ -41,7 +41,20 @@ namespace QrSystem.Controllers
                 ModelState.AddModelError(string.Empty, "Geçersiz QR kodu. Lütfen doğru bir QR kodu girin.");
                 return View(new List<BasketİtemVM>());
             }
+
             ViewBag.QrCodeId = qrCodeId;
+            // QR koduna ait restoran bilgisini bulun
+            var restoranId = _appDbContext.QrCodes
+                .Where(q => q.Id == qrCodeId)
+                .Select(q => q.RestorantId)
+                .FirstOrDefault();
+
+            // Restoran bilgisini kullanarak restoran adını bulun
+            var restoranName = _appDbContext.Restorant
+                .Where(r => r.Id == restoranId)
+                .Select(r => r.RestorantName)
+                .FirstOrDefault();
+            ViewBag.RestoranName = restoranName;
             var basketCookieName = COOKIES_BASKET + "_" + qrCodeId;
             List<BasketVM> basketVMList = JsonConvert.DeserializeObject<List<BasketVM>>(Request.Cookies[basketCookieName] ?? "[]");
 
@@ -58,7 +71,6 @@ namespace QrSystem.Controllers
                         Id = product.Id,
                         Price=product.Price,
                         ImagePath=product.ImagePath,
-                        
                         QrCodeId = qrCodeId.Value,
                         ProductId = basketItem.ProductId,
                         ProductCount = basketItem.Count // Ürün sayısını burada ekleyin
@@ -266,6 +278,7 @@ namespace QrSystem.Controllers
                     // Eğer ürün veritabanında yoksa veya silinmişse, yeni bir kayıt ekle
                     var newOrder = new SaxlanilanSifarish
                     {
+                        Comment=product.Comment,
                         QrCodeId = qrCodeId,
                         Name = product.Name,
                         ProductId = product.ProductId,
@@ -274,6 +287,7 @@ namespace QrSystem.Controllers
                         ProductCount = product.ProductCount, // Onaylanan miktar
                         ImagePath = product.ImagePath,
                         TableName = product.TableName,
+                        RestorantId = product.ResTorantId,
                         IsDeleted = false // Yeni kayıtlar için IsDeleted varsayılan olarak false olmalı
                     };
                     _appDbContext.SaxlanilanS.Add(newOrder);
@@ -354,7 +368,9 @@ namespace QrSystem.Controllers
                             Price = product.Price,
                             ProductCount = item.Count,
                             ImagePath = product.ImagePath,
-                            TableName = tableName
+                            ResTorantId=product.RestorantId,
+                            TableName = tableName,
+
                         });
                     }
                 }

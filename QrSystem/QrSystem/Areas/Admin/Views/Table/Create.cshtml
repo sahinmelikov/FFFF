@@ -11,6 +11,11 @@
                 <input asp-for="TableNumber" class="form-control">
                 <span asp-validation-for="TableNumber" class="text-danger"></span>
 
+                <div class="form-group">
+                    <label asp-for="RestorantId"></label>
+                    <input asp-for="RestorantId" class="form-control" readonly>
+                    <span asp-validation-for="RestorantId" class="text-danger"></span>
+                </div>
             </div>
             <button class="btn btn-success" type="submit">Submit</button>
         </form>

@@ -18,6 +18,26 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/AddRestoran/Views/Restorant/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRkUmVzdG9yYW5cVmlld3NcUmVzdG9yYW50XENyZWF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/AddRestoran/Views/Restorant/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRkUmVzdG9yYW5cVmlld3NcUmVzdG9yYW50XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/AddRestoran/Views/Restorant/Update.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRkUmVzdG9yYW5cVmlld3NcUmVzdG9yYW50XFVwZGF0ZS5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/AddRestoran/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRkUmVzdG9yYW5cVmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/AddRestoran/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRkUmVzdG9yYW5cVmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/Admin/Views/AllBasket/Deleted.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWxsQmFza2V0XERlbGV0ZWQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 

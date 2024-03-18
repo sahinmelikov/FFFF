@@ -16,20 +16,24 @@ namespace QrSystem.Controllers
             _appDbContext = appDbContext;
         }
         [HttpGet]
-        public IActionResult Index(int? qrCodeId) // qrCodeId URL'den gelecek
+        public IActionResult Index(int? qrCodeId)
         {
+            // Session'dan QR kodunu al
             int? sessionQrCodeId = HttpContext.Session.GetInt32("QrCodeId");
+
+            // URL'den qrCodeId gelmediyse ama session'da varsa, session'daki değeri kullan
             if (!qrCodeId.HasValue && sessionQrCodeId.HasValue)
             {
-                // URL'den qrCodeId gelmediyse ama session'da varsa, session'daki değeri kullan
                 qrCodeId = sessionQrCodeId;
             }
 
             if (qrCodeId.HasValue)
             {
+                // Session'a QR kodunu kaydet
                 HttpContext.Session.SetInt32("QrCodeId", qrCodeId.Value);
                 ViewBag.QrCodeId = qrCodeId.Value;
 
+                // QR koduna göre masa bul
                 var masa = _appDbContext.Tables.FirstOrDefault(m => m.QrCodeId == qrCodeId.Value);
 
                 if (masa != null)
@@ -40,19 +44,40 @@ namespace QrSystem.Controllers
                         .Select(q => q.RestorantId)
                         .FirstOrDefault();
 
-                    // Restoran ID'sine sahip olan ürünleri getir
-                    var products = _appDbContext.Products
-                        .Where(p => p.RestorantId == restoranId)
-                        .ToList();
-
-                    var homeVM = new HomeVM()
+                    if (restoranId.HasValue)
                     {
-                        Product = products,
-                        RestourantTables = _appDbContext.Tables.Where(d => d.QrCodeId == qrCodeId.Value).ToList(),
-                        ParentsCategory = _appDbContext.ParentsCategories.ToList(),
-                        Restorants = _appDbContext.Restorant.ToList()
-                    };
-                    return View(homeVM);
+                        // Restoran ID'sine sahip olan restoranı bul
+                        var restoran = _appDbContext.Restorant.FirstOrDefault(r => r.Id == restoranId.Value);
+
+                        if (restoran != null)
+                        {
+                            // Restoran ID'sine sahip olan ürünleri getir
+                            var products = _appDbContext.Products
+                                .Where(p => p.RestorantId == restoranId.Value)
+                                .ToList();
+
+                            // HomeVM oluştur ve verileri doldur
+                            var homeVM = new HomeVM()
+                            {
+                                Product = products,
+                                RestourantTables = _appDbContext.Tables.Where(d => d.QrCodeId == qrCodeId.Value).ToList(),
+                                ParentsCategory = _appDbContext.ParentsCategories.ToList(),
+                                Restorants = _appDbContext.Restorant.ToList(),
+                                CurrentRestoran = restoran // Restoran bilgisini view modeline ekleyin
+                            };
+                            return View(homeVM);
+                        }
+                        else
+                        {
+                            ModelState.AddModelError(string.Empty, "Restoran bulunamadı. Lütfen geçerli bir QR kodu girin.");
+                            return View();
+                        }
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Restoran ID'si bulunamadı. Lütfen geçerli bir QR kodu girin.");
+                        return View();
+                    }
                 }
                 else
                 {
@@ -66,7 +91,6 @@ namespace QrSystem.Controllers
                 return View("ErrorPage"); // Varsayılan davranış olarak bir hata sayfasına yönlendirme
             }
         }
-
 
 
 

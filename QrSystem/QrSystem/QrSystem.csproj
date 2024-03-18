@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\AddRestoran\Data\" />
+    <Folder Include="Areas\AddRestoran\Models\" />
     <Folder Include="wwwroot\mado\hts-cache\ref\" />
     <Folder Include="wwwroot\mado\mado.az\menu\bakery\" />
     <Folder Include="wwwroot\mado\mado.az\menu\biznes-lanch\" />
@@ -70,6 +72,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.16" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 

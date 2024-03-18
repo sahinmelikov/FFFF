@@ -252,6 +252,9 @@ namespace QrSystem.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
@@ -282,11 +285,16 @@ namespace QrSystem.Migrations
                     b.Property<int>("QrCodeId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("RestorantId")
+                        .HasColumnType("int");
+
                     b.Property<string>("TableName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RestorantId");
 
                     b.ToTable("SaxlanilanS");
                 });
@@ -298,6 +306,9 @@ namespace QrSystem.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -328,6 +339,9 @@ namespace QrSystem.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("QrCodeId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ResTorantId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SaxlanilanSifarishId")
@@ -536,6 +550,15 @@ namespace QrSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("QrCode");
+                });
+
+            modelBuilder.Entity("QrSystem.Models.SaxlanilanSifarish", b =>
+                {
+                    b.HasOne("QrSystem.Models.Restorant", "Restorant")
+                        .WithMany()
+                        .HasForeignKey("RestorantId");
+
+                    b.Navigation("Restorant");
                 });
 
             modelBuilder.Entity("QrSystem.ViewModel.BasketİtemVM", b =>

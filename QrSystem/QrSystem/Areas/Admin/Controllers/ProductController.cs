@@ -61,11 +61,26 @@ namespace QrSystem.Areas.Admin.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            // Kullanıcının bağlı olduğu restoranın ID'sini alın
+            int restorantId = GetCurrentUserRestorantId();
+
+            // Restoran ID'si bulunamazsa hata mesajı döndürün veya uygun bir işlem yapın
+            if (restorantId == 0)
+            {
+                // Hata mesajı göstermek için ModelState kullanabilirsiniz
+                ModelState.AddModelError(string.Empty, "Restoran bulunamadı.");
+                return View();
+            }
+
+            // Restoran ID'si bulunduysa, yeni bir QR kodu oluşturmak için kullanabiliriz
+            var qrVM = new ProductVM { RestorantId = restorantId };
+            return View(qrVM);
         }
         [HttpPost]
         public async Task<IActionResult> Create(ProductVM productVM)
         {
+            // Kullanıcının bağlı olduğu restoranın ID'sini alın
+            int restorantId = GetCurrentUserRestorantId();
             IFormFile file = productVM.ImageFile;
             if (!file.ContentType.Contains("image/"))
             {
@@ -83,7 +98,7 @@ namespace QrSystem.Areas.Admin.Controllers
             {
                 file.CopyTo(stream);
             }
-            Product product = new Product { Name = productVM.Name,Price= productVM.Price, Description=productVM.Description , ImagePath=filename , Quantity=productVM.Quantity, ParentsCategoryId=productVM.ParentsCategoryId, DateTime = DateTime.Now };
+            Product product = new Product { Name = productVM.Name,Price= productVM.Price, Description=productVM.Description , ImagePath=filename , Quantity=productVM.Quantity, ParentsCategoryId=productVM.ParentsCategoryId, DateTime = DateTime.Now, RestorantId = restorantId };
             _context.Products.Add(product);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));

@@ -11,5 +11,6 @@ namespace QrSystem.ViewModel
         public IFormFile ImageFile { get; set; }
         public List<RestourantTables> Tables { get; set; }
         public int ParentsCategoryId { get; set; }
+        public int RestorantId { get; set; }
     }
 }

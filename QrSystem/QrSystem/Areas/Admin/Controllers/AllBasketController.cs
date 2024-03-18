@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using QrSystem.DAL;
 using QrSystem.Models;
+using QrSystem.Models.Auth;
 using QrSystem.ViewModel;
+using System.Security.Claims;
 
 namespace QrSystem.Areas.Admin.Controllers
 {
@@ -14,10 +17,11 @@ namespace QrSystem.Areas.Admin.Controllers
     {
         private const string COOKIES_BASKET = "basketVM";
         private readonly AppDbContext _appDbContext;
-
-        public AllBasketController(AppDbContext appDbContext)
+        private readonly UserManager<AppUser> _userManager;
+        public AllBasketController(AppDbContext appDbContext, UserManager<AppUser> userManager)
         {
             _appDbContext = appDbContext;
+            _userManager = userManager;
         }
 
         private void SetBasketItemCountInViewBag()
@@ -37,9 +41,12 @@ namespace QrSystem.Areas.Admin.Controllers
         {
             try
             {
-                // Veritabanından ilgili masa numarasına ait onaylanmış ürünleri bul
+                // Giriş yapılan restoranın ID'sini alın
+                int restoranId = GetCurrentUserRestorantId();
+
+                // Veritabanından ilgili restorana ait onaylanmış ürünleri bul
                 var productsToDelete = _appDbContext.SaxlanilanS
-                    .Where(p => p.QrCodeId == qrCodeId)
+                    .Where(p => p.QrCodeId == qrCodeId && p.RestorantId == restoranId)
                     .ToList();
 
                 // Bulunan ürünlerin IsDeleted özelliğini true olarak güncelle
@@ -63,8 +70,13 @@ namespace QrSystem.Areas.Admin.Controllers
         {
             var viewModel = new UrunlerViewModel();
 
-            // Tüm onaylanmış ürünleri veritabanından al
-            var approvedProducts = _appDbContext.SaxlanilanS.Where(a =>!a.IsDeleted).ToList();
+            // Giriş yapılan restoranın ID'sini alın
+            int restoranId = GetCurrentUserRestorantId();
+
+            // Tüm onaylanmış ürünleri giriş yapılan restorana ait olanları veritabanından al
+            var approvedProducts = _appDbContext.SaxlanilanS
+                .Where(a => !a.IsDeleted && a.RestorantId == restoranId)
+                .ToList();
 
             foreach (var product in approvedProducts)
             {
@@ -87,12 +99,22 @@ namespace QrSystem.Areas.Admin.Controllers
                     ProductCount = product.ProductCount,
                     ImagePath = product.ImagePath,
                     TableName = product.TableName,
-                   
-                    
                 });
             }
 
             return View(viewModel);
+        }
+
+        private int GetCurrentUserRestorantId()
+        {
+            // Kullanıcının kimliğini alın
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Kullanıcının bağlı olduğu restoranın ID'sini veritabanından alın
+            var user = _userManager.FindByIdAsync(userId).Result;
+            var restorantId = user.RestorantId;
+
+            return restorantId.Value;
         }
 
 
@@ -121,7 +143,7 @@ namespace QrSystem.Areas.Admin.Controllers
         //            ProductCount = product.ProductCount,
         //            ImagePath = product.ImagePath,
         //            TableName = tableName
-                    
+
         //        };
 
         //        if (!approvedProductsByQrCodeAndTable.ContainsKey(qrCodeId))
@@ -178,7 +200,7 @@ namespace QrSystem.Areas.Admin.Controllers
         //            }
         //        }
         //    }
-            
+
         //    _appDbContext.SaveChanges();
         //    return basketItemVMs;
         //}

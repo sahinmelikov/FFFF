@@ -9,6 +9,7 @@
                 <th>TableNumber</th>
                 <th>QrCodeId</th>
                 <th>CreateTime</th>
+               <th>RestorantName</th>
 
                 <th colspan="2">Action</th>
             </tr>
@@ -20,6 +21,7 @@
                     <td>@item.Id</td>
                     <td>@item.TableNumber</td>
                     <td>@item.QrCodeId</td>
+                    <td>@item.QrCode.Restorant.RestorantName</td>
                     <td>@item.DateTime</td>
                     <td><a class="btn btn-warning" asp-action="Update" asp-route-id="@item.Id">Update</a></td>
                     <td><a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a></td>

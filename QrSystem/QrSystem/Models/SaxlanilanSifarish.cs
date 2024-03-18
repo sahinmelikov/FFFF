@@ -18,7 +18,9 @@ namespace QrSystem.Models
         public string ImagePath { get; set; }
 
         public int ProductCount { get; set; }
-       
+        public string? Comment { get; set; }
+        public Restorant Restorant { get; set; }
+        public int? RestorantId { get; set; }
         public List<BasketİtemVM> OrderedProducts { get; set; }
     }
 }

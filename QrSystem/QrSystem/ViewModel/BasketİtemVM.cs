@@ -16,7 +16,8 @@ namespace QrSystem.ViewModel
         public string TableName { get; set; }
         public int QrCodeId { get; set; }
         public int ProductId { get; set; }
-   
+        public int? ResTorantId { get; set; }
+        public string? Comment { get; set; }
         public bool IsApproved { get; set; }
         public string ImagePath { get; set; }
         public string OrderNote { get; set; }
