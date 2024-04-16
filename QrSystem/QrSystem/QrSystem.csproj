@@ -76,4 +76,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
+  <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="https://json.schemastore.org/dotnet-tools.json" /></VisualStudio></ProjectExtensions>
+
 </Project>

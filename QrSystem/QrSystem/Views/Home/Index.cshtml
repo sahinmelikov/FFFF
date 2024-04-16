@@ -405,26 +405,66 @@
                             @{
                                 ViewBag.ActiveCategoryId = Model.ParentsCategory.FirstOrDefault(c => c.Isactive)?.Id;
                             }
+                            @{
+                                ViewBag.ActiveBigCategoryId = Model.BigParentCategories.FirstOrDefault(c => c.IsActive)?.Id;
+                            }
 
-
-                            <div class=" category-filter" style="overflow: auto;" id="ddd">
+                            <div class="category-filter" style="overflow: auto;" id="ddd">
                                 <div class="category">
                                     <ul class="tabcontent-general allCategories">
-
-                                        @foreach (var item in Model.ParentsCategory)
+                                        @foreach (var item in Model.BigParentCategories)
                                         {
-                                            <button class="tablinks mybtn @(item.Id == ViewBag.ActiveCategoryId ? "active" : "")" onclick="openCity(event, '@item.Id')">@item.Name</button>
+                                            <button class="tablinks mybtn @(item.Id == ViewBag.ActiveBigCategoryId ? "active" : "")" onclick="openParentCategory('@item.Id', '@item.Name')">@item.Name</button>
                                         }
-
-
                                     </ul>
                                 </div>
                                 <div id="f-scroll"></div>
-
-
+                            </div>
+                            <div class="category-filter" style="overflow: auto;" id="ddd">
+                                <div class="category">
+                                    <ul class="tabcontent-general allCategories">
+                                        @foreach (var bigParentCategory in Model.BigParentCategories)
+                                        {
+                                            <div id="parent-category-@bigParentCategory.Id" class="parent-category" style="display: @(bigParentCategory.Id == ViewBag.ActiveBigCategoryId ? "block" : "none"); float: left; margin-right: 20px;">
+                                                @foreach (var parentCategory in Model.ParentsCategory.Where(pc => pc.bigParentCategoryId == bigParentCategory.Id))
+                                                {
+                                                    <!-- Düğme içinde metin yerine düğme etiketleri arasına metin ekleniyor -->
+                                                    <button class="tablinks mybtn @(parentCategory.Id == ViewBag.ActiveCategoryId ? "active" : "")" onclick="openCity(event, '@parentCategory.Id')" style="display: inline-block; margin-bottom: 25px; margin-right: 5px;">
+                                                        <span style="margin-bottom:20px">  @parentCategory.Name <!-- Metni burada düğme içinde gösteriyoruz -->  </span>
+                                                    </button>
+                                                }
+                                            </div>
+                                        }
+                                    </ul>
+                                </div>
+                                <div id="f-scroll"></div>
                             </div>
 
+
+
+
+
+                            <script>
+                                function openParentCategory(bigParentCategoryId, bigParentCategoryName) {
+                                    // Tüm ParentCategory bölümlerini gizle
+                                    var parentCategories = document.querySelectorAll('.parent-category');
+                                    parentCategories.forEach(function (parentCategory) {
+                                        parentCategory.style.display = 'none';
+                                    });
+
+                                    // İlgili ParentCategory bölümlerini göster
+                                    var parentCategory = document.getElementById('parent-category-' + bigParentCategoryId);
+                                    if (parentCategory) {
+                                        parentCategory.style.display = 'block';
+                                    }
+                                }
+                            </script>
+
+
+
+                            
                             <div class="container product1" style="" id="meals">
+                                
                                 @foreach (var item in Model.ParentsCategory)
                                 {
                                     var isActive = ViewBag.ActiveCategoryId == item.Id;

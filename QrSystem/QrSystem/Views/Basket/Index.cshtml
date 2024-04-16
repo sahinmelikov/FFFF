@@ -154,7 +154,7 @@
                                                     @Html.Hidden("id", item.Id)
                                                     @Html.Hidden("qrCodeId", item.QrCodeId) <!-- QR kodu bilgisini gizli alanda tut -->
                                                     <div class="trash-menu text-center" style="display: none;">
-                                                        <p class="mb-3">Məhsulu səbətdən silmək istədiyinizə əminsiniz?</p>
+                                                        <p class="mb-3">Məhsulu səbətdən silmək istədiyinizə əminsinizzz?</p>
                                                         <p>@ViewBag.MyData</p>
                                                         <button type="submit" class="button-border">Bəli</button>
                                                         <button type="reset" class="button-border">Xeyr</button>
@@ -307,12 +307,16 @@
                                 </div>
                             </div>
                             <br /><br />
-                           
-                            <div class="form-group">
-                                <label asp-for=" @Model.FirstOrDefault().Comment"></label>
-                                <input asp-for=" @Model.FirstOrDefault().Comment" class="form-control">
-                                <span asp-validation-for=" @Model.FirstOrDefault().Comment" class="text-danger"></span>
-                            </div>
+
+                           @*  @if (Model.Any())
+                            {
+                                <div class="form-group">
+                                    <label asp-for="@Model.First().Comment"></label>
+                                    <input asp-for="@Model.First().Comment" class="form-control">
+                                    <span asp-validation-for="@Model.First().Comment" class="text-danger"></span>
+                                </div>
+                            } *@
+
                             
                             <button id="submitButton" type="submit" class="cart-next-btn">Siparişinizi Onaylayın</button>
 
@@ -361,7 +365,13 @@
                                         <p><span>Qebz #:</span> 100283</p>
                                         <p><span>Masa:</span> @masaadi  <span>Qonaq:</span> #</p>
                                         <p><span>Acilib:</span> # <span>Baglanib:</span> #</p>
-                                        <p><span>Kassir:</span> Zaur <span>Ofisiant:</span> Elnur</p>
+                                        <p><span>Kassir:</span> Zaur <span>Ofisiant:
+
+                                            </span>@if (Model.Any())
+                                            {@Model.FirstOrDefault().OfisantName
+
+                                            }
+                                        </p>
                                     </div>
 
                                     <div class="table-responsive">

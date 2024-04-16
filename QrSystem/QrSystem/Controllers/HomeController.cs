@@ -56,12 +56,24 @@ namespace QrSystem.Controllers
                                 .Where(p => p.RestorantId == restoranId.Value)
                                 .ToList();
 
+                            // Restoran ID'sine sahip olan ürünleri getir
+                            var products1 = _appDbContext.BigParentCategory
+                                .Include(d=>d.ParentCategories)
+                                .Where(p => p.RestorantId == restoranId.Value)
+                                .ToList();
+                            // Restoran ID'sine sahip olan ürünleri getir
+                            var products2 = _appDbContext.ParentsCategories
+                               
+                                .Where(p => p.RestorantId == restoranId.Value)
+                                .ToList();
                             // HomeVM oluştur ve verileri doldur
                             var homeVM = new HomeVM()
                             {
                                 Product = products,
                                 RestourantTables = _appDbContext.Tables.Where(d => d.QrCodeId == qrCodeId.Value).ToList(),
-                                ParentsCategory = _appDbContext.ParentsCategories.ToList(),
+                                ParentsCategory = products2,
+                                BigParentCategories= products1,
+                                
                                 Restorants = _appDbContext.Restorant.ToList(),
                                 CurrentRestoran = restoran // Restoran bilgisini view modeline ekleyin
                             };

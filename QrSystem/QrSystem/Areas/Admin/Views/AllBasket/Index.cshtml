@@ -8,6 +8,7 @@
     <title>Ürünler</title>
     <!-- Bootstrap CSS bağlantısı -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="container mt-5">
@@ -15,7 +16,7 @@
         {
             <div class="row" id="row-@qrCodeId">
                 <div class="col">
-                    <h3>Masa Numarası @qrCodeId</h3>
+                    <h3>Masa Numarası @qrCodeId - Ofisant: @Model.OfisantName</h3>
                     <table class="table">
                         <thead>
                             <tr>
@@ -24,31 +25,98 @@
                                 <th>Fiyat</th>
                                 <th>Ürün Adedi</th>
                                 <th>Resim</th>
-                                <th>Comment</th>
-                               
+                                <th>Ofisant</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @{
-                                var displayedProducts = new HashSet<int>();
-                            }
                             @foreach (var kvp in Model.UrunlerByQrCodeAndTable[qrCodeId])
                             {
-                                foreach (var product in kvp.Value.GroupBy(p => p.Name))
+                                @foreach (var product in kvp.Value)
                                 {
                                     <tr>
-                                        <td>@product.Key</td>
-                                        <td>@product.First().Description</td>
-                                        <td>@product.First().Price</td>
-                                        <td>@product.Sum(p => p.ProductCount)</td>
-                                        <td><img src="~/Image/Product/@product.First().ImagePath" alt="@product.Key" width="100" height="100" /></td>
-                                       <td>@product.FirstOrDefault().Comment</td>
+                                        <td>@product.Name</td>
+                                        <td>@product.Description</td>
+                                        <td>@product.Price</td>
+                                        <td>@product.ProductCount</td>
+                                        <td><img src="~/Image/Product/@product.ImagePath" alt="@product.Name" width="100" height="100" /></td>
+                                        <td>@product.OfisantName</td>
+                                        <td id="timerCell_@product.Id">
+                                            <form id="timerForm_@product.Id" asp-route-qrCodeId="@product.QrCodeId" asp-route-productId="@product.ProductId" asp-route-siparisId="@product.Id" method="post" asp-controller="AllBasket" asp-action="TimeBashlat">
+                                                <!-- Gerekli gizli alanlar -->
+                                                <input type="hidden" name="productId" value="@product.ProductId" />
+                                                <input type="hidden" name="siparisId" value="@product.Id" />
+                                                <!-- Dakika seçimini yapacak dropdown -->
+                                                <label for="dakikaSecimi_@product.Id">Dakika Seçimi:</label>
+                                                <select id="dakikaSecimi_@product.Id" name="selectedMinute">
+                                                    <option value="5">5</option>
+                                                    <option value="10">10</option>
+                                                    <option value="15">15</option>
+                                                    <option value="20">20</option>
+                                                    <option value="25">25</option>
+                                                    <option value="30">30</option>
+                                                    <option value="40">40</option>
+                                                </select>
+                                                <!-- Timerı başlatan buton -->
+                                                <button type="submit" id="startTimerButton_@product.Id">Timer Başlat</button>
+                                            </form>
+                                            <!-- Geri sayımı gösterecek olan div -->
+                                            <p id="countdown_@product.Id"></p>
+                                        </td>
                                     </tr>
-                                }
+                                    <script>
+                                        $(document).ready(function () {
+                                            var countdownElement = $("#countdown_@product.Id");
+                                            var countdownInterval;
+                                            var countdownStartTime;
 
+                                            // Sayfa yenilendiğinde localStorage'dan geri yükleme yap
+                                            var storedStartTime = localStorage.getItem("countdownStartTime_@product.Id");
+                                            if (storedStartTime !== null) {
+                                                countdownStartTime = new Date(storedStartTime);
+                                                startCountdown();
+                                            }
+
+                                            $("#timerForm_@product.Id").submit(function (event) {
+                                                event.preventDefault();
+                                                var formData = $(this).serialize();
+                                                var selectedMinute = $(this).find("select[name='selectedMinute']").val();
+                                                countdownStartTime = new Date();
+                                                startCountdown();
+                                                $.post($(this).attr("action"), formData);
+                                            });
+
+                                            function startCountdown() {
+                                                clearInterval(countdownInterval);
+                                                countdownInterval = setInterval(function () {
+                                                    var now = new Date();
+                                                    var elapsedTime = Math.floor((now - countdownStartTime) / 1000);
+                                                    var selectedMinute = $("#dakikaSecimi_@product.Id").val() * 60;
+                                                    var remainingTime = selectedMinute - elapsedTime;
+                                                    if (remainingTime <= 0) {
+                                                        clearInterval(countdownInterval);
+                                                        countdownElement.text("Süre doldu!");
+                                                        localStorage.removeItem("countdownStartTime_@product.Id");
+                                                    } else {
+                                                        countdownElement.text("Kalan süre: " + formatTime(remainingTime));
+                                                        localStorage.setItem("countdownStartTime_@product.Id", countdownStartTime);
+                                                    }
+                                                }, 1000);
+                                            }
+
+                                            function formatTime(seconds) {
+                                                var minutes = Math.floor(seconds / 60);
+                                                var remainingSeconds = seconds % 60;
+                                                return minutes + " dakika " + remainingSeconds + " saniye";
+                                            }
+
+                                            // Sayfa kapatıldığında veya yenilendiğinde localStorage'a değeri kaydet
+                                            window.onbeforeunload = function () {
+                                                localStorage.setItem("countdownStartTime_@product.Id", countdownStartTime);
+                                            };
+                                        });
+                                    </script>
+                                }
                             }
-                       
-                        
                         </tbody>
                     </table>
 
@@ -56,35 +124,9 @@
                         <input type="hidden" name="qrCodeId" value="@qrCodeId" />
                         <button type="submit" class="btn btn-danger">Sil</button>
                     </form>
-
                 </div>
             </div>
         }
     </div>
-
-    <script>
-        function submitForm(qrCodeId) {
-            var form = document.getElementById('form-' + qrCodeId);
-            form.submit();
-
-            // Silme işlemi tamamlandığında div'i gizle
-            var row = document.getElementById('row-' + qrCodeId);
-            row.style.display = 'none';
-        }
-    </script>
-    <script>
-        // Sayfanın 5 saniyede bir yenilenmesini sağlayan fonksiyon
-        function refreshPage() {
-            location.reload(); // Sayfayı yenile
-        }
-
-        // 5 saniyede bir 'refreshPage' fonksiyonunu çağıran setInterval fonksiyonu
-        setInterval(refreshPage, 5000); // 5000 milisaniye = 5 saniye
-    </script>
-
-    <!-- Bootstrap JS ve bağımlılıkları -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

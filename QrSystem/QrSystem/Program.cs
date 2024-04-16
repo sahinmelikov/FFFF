@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using QrSystem.DAL;
+using QrSystem.Models;
 using QrSystem.Models.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,7 +32,7 @@ builder.Services.Configure<IdentityOptions>(opt =>
 // Entity Framework Core kullanarak veritabaný baðlantýsýný yapýlandýrýn
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseSqlServer("Data Source=SQL5106.site4now.net;Initial Catalog=db_aa64c4_qrsystem;User Id=db_aa64c4_qrsystem_admin;Password=ferid2003");
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:Default"]);
     options.EnableSensitiveDataLogging();
 });
 

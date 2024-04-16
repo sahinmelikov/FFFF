@@ -11,7 +11,9 @@ namespace QrSystem.ViewModel
         public int QrCodeId { get;set; }
         public int ProductId { get;set; }
         public RestourantTables SelectedTable { get; set; }
+        public List<BigParentCategory>BigParentCategories { get; set; }
        public List <ParentCategory> ParentsCategory { get; set; }
+        public List<Ofisant> Ofisants { get; set; }
         public Restorant CurrentRestoran { get; set; } // Eklendi: QR kodu ile ilişkilendirilen restoran
     }
 }

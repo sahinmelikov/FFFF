@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using QrSystem.DAL;
 using QrSystem.Models;
+using QrSystem.Models.Auth;
 using QrSystem.ViewModel;
+using System.Security.Claims;
 
 namespace QrSystem.Areas.Admin.Controllers
 {
@@ -12,14 +16,33 @@ namespace QrSystem.Areas.Admin.Controllers
     {
         readonly AppDbContext _context;
         readonly IWebHostEnvironment _env;
-        public ParentController(AppDbContext context, IWebHostEnvironment env)
+        private readonly UserManager<AppUser> _userManager;
+        public ParentController(AppDbContext context, IWebHostEnvironment env, UserManager<AppUser> userManager = null)
         {
             _context = context;
             _env = env;
+            _userManager = userManager;
         }
         public IActionResult Index()
         {
-            return View(_context.ParentsCategories.ToList());
+            // Kullanıcının bağlı olduğu restoranın ID'sini alın
+            int restorantId = GetCurrentUserRestorantId();
+
+            // İstenen restoranın ID'sine sahip olan restoranı ve onun ürünlerini getirin
+            var restoran = _context.Restorant
+
+                                   .Include(r => r.ParentCategories) // Restoranın ürünlerini de getirin
+                                   .FirstOrDefault(r => r.Id == restorantId);
+
+            if (restoran == null)
+            {
+                // Eğer istenen restoran bulunamazsa, hata mesajı gösterin
+                ViewBag.ErrorMessage = "No matching restaurant found!";
+                return View();
+            }
+
+            return View(restoran.ParentCategories);
+
         }
         public async Task<IActionResult> Delete(int? id)
         {
@@ -30,15 +53,48 @@ namespace QrSystem.Areas.Admin.Controllers
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
-        public IActionResult Create()
+
+
+        // Kullanıcının bağlı olduğu restoranın ID'sini döndüren yardımcı bir metot
+        private int GetCurrentUserRestorantId()
         {
-            return View();
+            // Kullanıcının kimliğini alın
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Kullanıcının bağlı olduğu restoranın ID'sini veritabanından alın
+            var user = _userManager.FindByIdAsync(userId).Result;
+            var restorantId = user.RestorantId;
+
+            return restorantId.HasValue ? restorantId.Value : 0; // Varsayılan değer olarak 0 kullanıldı, siz istediğiniz bir değeri verebilirsiniz.
+        }
+  
+      public IActionResult Create()
+        {
+            // Kullanıcının bağlı olduğu restoranın ID'sini alın
+            int restorantId = GetCurrentUserRestorantId();
+
+            // Restoran ID'si bulunamazsa hata mesajı döndürün veya uygun bir işlem yapın
+            if (restorantId == 0)
+            {
+                // Hata mesajı göstermek için ModelState kullanabilirsiniz
+                ModelState.AddModelError(string.Empty, "Restoran bulunamadı.");
+                return View();
+            }
+
+            // Restoran ID'si bulunduysa, yeni bir QR kodu oluşturmak için kullanabiliriz
+            var qrVM = new ParentCategoryVM { RestorantId = restorantId };
+            return View(qrVM);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(ParentCategoryVM parentCategoryVM)
+        public async Task<IActionResult> Create(ParentCategoryVM productVM)
         {
-            ParentCategory parents= new ParentCategory { Name= parentCategoryVM.Name, Isactive=parentCategoryVM.Isactive , DateTime = DateTime.Now };
-            _context.ParentsCategories.Add(parents);
+            // Kullanıcının bağlı olduğu restoranın ID'sini alın
+            int restorantId = GetCurrentUserRestorantId();
+          
+           
+           
+            ParentCategory product = new ParentCategory { Name = productVM.Name, bigParentCategoryId=productVM.bigParentCategoryId ,RestorantId=restorantId};
+            _context.ParentsCategories.Add(product);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }

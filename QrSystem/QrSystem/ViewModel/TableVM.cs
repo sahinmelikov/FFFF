@@ -8,6 +8,8 @@ namespace QrSystem.ViewModel
         public QrCode QrCode { get; set; }
         public int QrCodeId { get; set; }
         public int RestorantId { get; set; }
+        public int? OfisantId { get; set; }
         public List<Product> Products { get; set; }
+        public List<TableVM> Tables { get; set; }
     }
 }

@@ -17,5 +17,8 @@ namespace QrSystem.DAL
         public DbSet<SaxlanilanSifarish> SaxlanilanS { get; set; }
         public DbSet<ParentCategory> ParentsCategories { get; set; }
         public DbSet<Restorant>Restorant{ get; set; }
+        public DbSet<BigParentCategory> BigParentCategory { get; set; }
+        public DbSet<Restorant> Restorants { get; set; }
+        public DbSet<Ofisant>Ofisant { get; set; }
     }
 }

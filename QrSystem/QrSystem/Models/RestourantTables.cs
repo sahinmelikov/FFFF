@@ -8,6 +8,8 @@ namespace QrSystem.Models
         public QrCode QrCode { get; set; }
         public int QrCodeId { get; set; }
         public List<Product> Products { get; set; }
+        public Ofisant Ofisant { get; set; }
+        public int? OfisantId { get; set; }
 
     }
 }

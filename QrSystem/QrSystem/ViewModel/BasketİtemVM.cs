@@ -18,9 +18,13 @@ namespace QrSystem.ViewModel
         public int ProductId { get; set; }
         public int? ResTorantId { get; set; }
         public string? Comment { get; set; }
+        public string OfisantName { get; set; }
+        public DateTime DateTime { get; set; }
+        public bool IsTimeExpired { get; set; }
         public bool IsApproved { get; set; }
         public string ImagePath { get; set; }
         public string OrderNote { get; set; }
         public int ProductCount { get; set; }
+      
     }
 }

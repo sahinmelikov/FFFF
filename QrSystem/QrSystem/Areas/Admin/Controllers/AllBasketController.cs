@@ -65,7 +65,6 @@ namespace QrSystem.Areas.Admin.Controllers
                 return RedirectToAction("Error", "Home");
             }
         }
-
         public IActionResult Index()
         {
             var viewModel = new UrunlerViewModel();
@@ -74,9 +73,10 @@ namespace QrSystem.Areas.Admin.Controllers
             int restoranId = GetCurrentUserRestorantId();
 
             // Tüm onaylanmış ürünleri giriş yapılan restorana ait olanları veritabanından al
-            var approvedProducts = _appDbContext.SaxlanilanS
+            var approvedProducts = _appDbContext.SaxlanilanS?
                 .Where(a => !a.IsDeleted && a.RestorantId == restoranId)
                 .ToList();
+            var Ofisant = _appDbContext.Ofisant.ToList();
 
             foreach (var product in approvedProducts)
             {
@@ -91,15 +91,23 @@ namespace QrSystem.Areas.Admin.Controllers
                     viewModel.UrunlerByQrCodeAndTable[product.QrCodeId][product.TableName] = new List<BasketİtemVM>();
                 }
 
-                viewModel.UrunlerByQrCodeAndTable[product.QrCodeId][product.TableName].Add(new BasketİtemVM
+                // Her bir sipariş için ayrı bir BasketİtemVM oluşturun
+                var basketItem = new BasketİtemVM
                 {
+                    Id = product.Id,
+                    ProductId=product.ProductId,
+                    QrCodeId = product.QrCodeId,
                     Name = product.Name,
                     Description = product.Description,
                     Price = product.Price,
                     ProductCount = product.ProductCount,
                     ImagePath = product.ImagePath,
                     TableName = product.TableName,
-                });
+                    OfisantName = product.OfisantName
+                };
+
+                // ViewModel'e ekle
+                viewModel.UrunlerByQrCodeAndTable[product.QrCodeId][product.TableName].Add(basketItem);
             }
 
             return View(viewModel);
@@ -113,10 +121,27 @@ namespace QrSystem.Areas.Admin.Controllers
             // Kullanıcının bağlı olduğu restoranın ID'sini veritabanından alın
             var user = _userManager.FindByIdAsync(userId).Result;
             var restorantId = user.RestorantId;
-
+            var ofisantName = user.OfisantName;
             return restorantId.Value;
         }
 
+        [HttpPost]
+        public IActionResult TimeBashlat(int selectedMinute, int productId, int qrCodeId, int siparisId)
+        {
+            var siparis = _appDbContext.SaxlanilanS.FirstOrDefault(s => s.Id == siparisId && s.ProductId == productId && s.QrCodeId == qrCodeId && !s.IsDeleted);
+
+            if (siparis != null)
+            {
+                // Seçilen dakikayı DateTime nesnesine ekleyin
+                siparis.DateTime = DateTime.Now.AddMinutes(selectedMinute);
+                _appDbContext.SaveChanges();
+
+                ViewBag.ProductId = productId; // ViewBag'e productId değerini ekleyin
+                return RedirectToAction("Index"); // Başka bir sayfaya yönlendirilebilir
+            }
+
+            return NotFound(); // Sipariş bulunamadı durumu
+        }
 
 
         //private Dictionary<int, Dictionary<string, List<BasketİtemVM>>> GetApprovedProducts()

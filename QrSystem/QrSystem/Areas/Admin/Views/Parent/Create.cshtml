@@ -7,6 +7,17 @@
                 <input asp-for="Name" class="form-control">
                 <span asp-validation-for="Name" class="text-danger"></span>
 
+               
+                    <label asp-for="RestorantId"></label>
+                    <input asp-for="RestorantId" class="form-control" readonly>
+                    <span asp-validation-for="RestorantId" class="text-danger"></span>
+
+
+
+                <label asp-for="bigParentCategoryId"></label>
+                <input asp-for="bigParentCategoryId" class="form-control" >
+                <span asp-validation-for="bigParentCategoryId" class="text-danger"></span>
+
                 <label asp-for="Isactive"></label>
                 <select asp-for="Isactive" class="form-control">
                     <option value="true">Aktif</option>

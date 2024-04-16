@@ -18,6 +18,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\sahin\Desktop\QrSystem-main\QrSystem\QrSystem
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/AddRestoran/Views/Ofisant/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRkUmVzdG9yYW5cVmlld3NcT2Zpc2FudFxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/AddRestoran/Views/Restorant/Create.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRkUmVzdG9yYW5cVmlld3NcUmVzdG9yYW50XENyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -44,6 +48,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/Admin/Views/AllBasket/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQWxsQmFza2V0XEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/Admin/Views/BigParentCategory/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQmlnUGFyZW50Q2F0ZWdvcnlcQ3JlYXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/Admin/Views/BigParentCategory/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcQmlnUGFyZW50Q2F0ZWdvcnlcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/Admin/Views/Parent/Create.cshtml]
@@ -76,6 +88,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/Admin/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/Admin/Views/Shared/_OtherOrdersPartialView.cshtml]
+build_metadata.AdditionalFiles.TargetPath = QXJlYXNcQWRtaW5cVmlld3NcU2hhcmVkXF9PdGhlck9yZGVyc1BhcnRpYWxWaWV3LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Areas/Admin/Views/Table/Create.cshtml]
@@ -128,10 +144,6 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Views/Restorant/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVzdG9yYW50XEluZGV4LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Views/Shared/_ValidationScriptsPartial.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/sahin/Desktop/QrSystem-main/QrSystem/QrSystem/Views/_ViewImports.cshtml]

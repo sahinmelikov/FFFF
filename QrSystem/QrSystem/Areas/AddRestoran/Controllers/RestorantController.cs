@@ -1,4 +1,5 @@
 ﻿using Hospital_Template.Utilities.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using QrSystem.DAL;
@@ -9,6 +10,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 namespace QrSystem.Areas.AddRestoran.Controllers
 {
     [Area("AddRestoran")]
+    [Authorize(Roles = "Admin")]
     public class RestorantController : Controller
     {
         readonly AppDbContext _context;

@@ -62,6 +62,10 @@ namespace QrSystem.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("OfisantName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
@@ -99,6 +103,31 @@ namespace QrSystem.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("QrSystem.Models.BigParentCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RestorantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RestorantId");
+
+                    b.ToTable("BigParentCategory");
+                });
+
             modelBuilder.Entity("QrSystem.Models.QrCode", b =>
                 {
                     b.Property<int>("Id")
@@ -124,6 +153,28 @@ namespace QrSystem.Migrations
                     b.ToTable("QrCodes");
                 });
 
+            modelBuilder.Entity("QrSystem.Models.Ofisant", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("RestorantId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RestorantId");
+
+                    b.ToTable("Ofisant");
+                });
+
             modelBuilder.Entity("QrSystem.Models.ParentCategory", b =>
                 {
                     b.Property<int>("Id")
@@ -142,7 +193,17 @@ namespace QrSystem.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("RestorantId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("bigParentCategoryId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("RestorantId");
+
+                    b.HasIndex("bigParentCategoryId");
 
                     b.ToTable("ParentsCategories");
                 });
@@ -231,6 +292,9 @@ namespace QrSystem.Migrations
                     b.Property<DateTime>("DateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("OfisantId")
+                        .HasColumnType("int");
+
                     b.Property<int>("QrCodeId")
                         .HasColumnType("int");
 
@@ -238,6 +302,8 @@ namespace QrSystem.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OfisantId");
 
                     b.HasIndex("QrCodeId");
 
@@ -255,7 +321,7 @@ namespace QrSystem.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateTime")
+                    b.Property<DateTime?>("DateTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -271,6 +337,9 @@ namespace QrSystem.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OfisantName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Price")
@@ -310,6 +379,9 @@ namespace QrSystem.Migrations
                     b.Property<string>("Comment")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("DateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -321,7 +393,14 @@ namespace QrSystem.Migrations
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsTimeExpired")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OfisantName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -515,6 +594,15 @@ namespace QrSystem.Migrations
                     b.Navigation("Restorant");
                 });
 
+            modelBuilder.Entity("QrSystem.Models.BigParentCategory", b =>
+                {
+                    b.HasOne("QrSystem.Models.Restorant", "Restorant")
+                        .WithMany("BigParentCategories")
+                        .HasForeignKey("RestorantId");
+
+                    b.Navigation("Restorant");
+                });
+
             modelBuilder.Entity("QrSystem.Models.QrCode", b =>
                 {
                     b.HasOne("QrSystem.Models.Restorant", "Restorant")
@@ -522,6 +610,30 @@ namespace QrSystem.Migrations
                         .HasForeignKey("RestorantId");
 
                     b.Navigation("Restorant");
+                });
+
+            modelBuilder.Entity("QrSystem.Models.Ofisant", b =>
+                {
+                    b.HasOne("QrSystem.Models.Restorant", "Restorant")
+                        .WithMany("Ofisants")
+                        .HasForeignKey("RestorantId");
+
+                    b.Navigation("Restorant");
+                });
+
+            modelBuilder.Entity("QrSystem.Models.ParentCategory", b =>
+                {
+                    b.HasOne("QrSystem.Models.Restorant", "Restorant")
+                        .WithMany("ParentCategories")
+                        .HasForeignKey("RestorantId");
+
+                    b.HasOne("QrSystem.Models.BigParentCategory", "bigParentCategory")
+                        .WithMany("ParentCategories")
+                        .HasForeignKey("bigParentCategoryId");
+
+                    b.Navigation("Restorant");
+
+                    b.Navigation("bigParentCategory");
                 });
 
             modelBuilder.Entity("QrSystem.Models.Product", b =>
@@ -543,11 +655,17 @@ namespace QrSystem.Migrations
 
             modelBuilder.Entity("QrSystem.Models.RestourantTables", b =>
                 {
+                    b.HasOne("QrSystem.Models.Ofisant", "Ofisant")
+                        .WithMany("RestourantTables")
+                        .HasForeignKey("OfisantId");
+
                     b.HasOne("QrSystem.Models.QrCode", "QrCode")
                         .WithMany()
                         .HasForeignKey("QrCodeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Ofisant");
 
                     b.Navigation("QrCode");
                 });
@@ -634,6 +752,16 @@ namespace QrSystem.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("QrSystem.Models.BigParentCategory", b =>
+                {
+                    b.Navigation("ParentCategories");
+                });
+
+            modelBuilder.Entity("QrSystem.Models.Ofisant", b =>
+                {
+                    b.Navigation("RestourantTables");
+                });
+
             modelBuilder.Entity("QrSystem.Models.ParentCategory", b =>
                 {
                     b.Navigation("Products");
@@ -641,6 +769,12 @@ namespace QrSystem.Migrations
 
             modelBuilder.Entity("QrSystem.Models.Restorant", b =>
                 {
+                    b.Navigation("BigParentCategories");
+
+                    b.Navigation("Ofisants");
+
+                    b.Navigation("ParentCategories");
+
                     b.Navigation("Products");
 
                     b.Navigation("QrCodes");

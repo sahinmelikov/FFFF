@@ -107,17 +107,21 @@ namespace QrSystem.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //public async Task<IActionResult> AddRoles()
-        //{
-        //    foreach (var role in Enum.GetValues(typeof(UserRoles)))
-        //    {
-        //        if (!await _roleManager.RoleExistsAsync(role.ToString()))
-        //        {
-        //            await _roleManager.CreateAsync(new IdentityRole { Name = role.ToString() });
-        //        }
-        //    }
-        //    return Json("Ok");
-        //}
+        public async Task<IActionResult> AddRoles()
+        {
+            foreach (var role in Enum.GetValues(typeof(UserRoles)))
+            {
+                if (!await _roleManager.RoleExistsAsync(role.ToString()))
+                {
+                    await _roleManager.CreateAsync(new IdentityRole { Name = role.ToString() });
+                }
+
+
+            }
+            return Json("Ok");
+        }
+
+
         public IActionResult AccessDenied()
         {
             return View();

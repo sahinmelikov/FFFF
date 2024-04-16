@@ -1,0 +1,12 @@
+﻿@* @model List<OrderViewModel>
+
+@foreach (var order in Model)
+{
+    <div>
+        <h4>Order ID: @order.OrderId</h4>
+        <p>Customer Name: @order.CustomerName</p>
+ 
+        <hr />
+    </div>
+}
+ *@
